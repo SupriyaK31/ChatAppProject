@@ -4,8 +4,14 @@ const userRoute=require('./routes/userRoute');
 const path=require('path');
 const sequalize=require('./utils/database');
 const bodyParser = require('body-parser');
+const cors=require('cors');
 
 const app=express();
+
+app.use(cors({
+    origin:"*",
+    credentials:true
+}));
 
 
 // Serve static files from the  directory

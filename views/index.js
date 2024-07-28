@@ -8,9 +8,9 @@ document.addEventListener("DOMContentLoaded",function(){
     loginBtn.addEventListener('click',function(event){
         event.preventDefault();
         window.location.href=`${apiUrl}/login`;
-    })
+    });
     signupBtn.addEventListener('click',function(event){
         event.preventDefault();
         window.location.href=`${apiUrl}/Signup`;
-    })
+    });
 });

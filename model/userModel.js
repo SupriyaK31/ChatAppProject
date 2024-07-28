@@ -12,7 +12,8 @@ const User =sequalize.define('user',{
         type:Sequalize.STRING
     },
     email:{
-        type:Sequalize.STRING
+        type:Sequalize.STRING,
+        unique:true
     },
     mobile:{
         type:Sequalize.STRING,
