@@ -1,5 +1,3 @@
-const { default: axios } = require("axios");
-
 function getLogin(event){
     event.preventDefault();
     const email=document.getElementById('exampleInputEmail1').value;
