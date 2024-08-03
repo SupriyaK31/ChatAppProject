@@ -24,4 +24,8 @@ const User =sequalize.define('user',{
     }
 });
 
+User.associate = function(models) {
+    User.belongsToMany(models.ChatMsg, { through: 'UserChatMsgs', as: 'groupchats', foreignKey: 'userId' });
+  };
+
 module.exports=User;

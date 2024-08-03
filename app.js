@@ -1,10 +1,17 @@
 const express=require('express');
 const PORT=3000;
 const userRoute=require('./routes/userRoute');
+const chatRoute=require('./routes/chatRoute');
 const path=require('path');
 const sequalize=require('./utils/database');
 const bodyParser = require('body-parser');
 const cors=require('cors');
+
+const user=require('./model/userModel');
+const chatMsg=require('./model/chatModel');
+const Group=require('./model/chatGroupModel');
+const { group } = require('console');
+const { FORCE } = require('sequelize/lib/index-hints');
 
 const app=express();
 
@@ -22,6 +29,14 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(userRoute);
+app.use(chatRoute);
+
+user.belongsToMany(chatMsg, { through: 'UserChatMsgs', as: 'groupchats' });
+chatMsg.belongsToMany(user, { through: 'UserChatMsgs', as: 'groupchats' });
+
+
+// user.belongsToMany(group);
+// group.belongsToMany(user);
 
 
 sequalize.sync().then(()=>{

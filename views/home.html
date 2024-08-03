@@ -9,7 +9,7 @@
     
 </head>
 <body style="background-image:url('chat.jpg')">
-<form id="ChatForm" method="post" onclick="pushMessage(event)">
+<form id="ChatForm" method="post" onsubmit="pushMessage(event)">
 <h1 class="text-center text-white">Chat App</h1>
 <div class="row justify-content-center text-white">
     <div class="col-md-3"></div>
@@ -23,7 +23,7 @@
 <div class="row justify-content-center mt-5">
     <div class="col-md-3"></div>
     <div class="col-md-6">
-    <input type="text" class="form-control" id="msgtext">
+    <input type="text" class="form-control" name="msgtext" id="msgtext">
     </div>
     <div class="col-md-3">
         <button class="btn btn-light" id="btnSend">send</button>
