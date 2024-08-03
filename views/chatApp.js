@@ -37,12 +37,13 @@ async function  loadChat(){
     await axios.get(`${URL}/chat`,{ headers:{"Authorization": token}}).then(async(response)=>{
         // console.log("response",response);
          const chats=response.data.data;
-        // console.log(chats);
+         const grpchat=response.data.data;
+         console.log("chat groups",grpchat);
         chats.forEach(async(chat)=>{
         AllChatMsg +=`
         <table class="table table-striped table-success text-white">
         <tr>
-        <td>${chat.name}: ${chat.chatMsg}</td>
+        <td>${chat.user.name}: ${chat.chatMsg}</td>
         </tr>
     </table>`
         })

@@ -31,12 +31,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(userRoute);
 app.use(chatRoute);
 
-user.belongsToMany(chatMsg, { through: 'UserChatMsgs', as: 'groupchats' });
-chatMsg.belongsToMany(user, { through: 'UserChatMsgs', as: 'groupchats' });
+chatMsg.belongsTo(user, { foreignKey: 'userID' });
+user.hasMany(chatMsg, { foreignKey: 'id' });
 
-
-// user.belongsToMany(group);
-// group.belongsToMany(user);
 
 
 sequalize.sync().then(()=>{

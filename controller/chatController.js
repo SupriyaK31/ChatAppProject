@@ -3,7 +3,6 @@ const path=require('path');
 const User=require('../model/userModel');
 const bcrypt=require('bcrypt');
 const sequalize = require('../utils/database');
-const { Sequelize, where, Model } = require('sequelize');
 const { hash } = require('crypto');
 const jwt = require('jsonwebtoken');
 const dotenv=require('dotenv');
@@ -35,9 +34,10 @@ const showChatMsg=async(req,res)=>{
 try{
     const chats = await chat.findAll({
          where: { groupID: 1 },
+         attributes:['chatMsg'],
         include: [{
             model: User,
-            as: 'groupchats',
+            attributes:['name'],
           }]
       });
         res.status(200).json({message:"chat Details", data:chats});

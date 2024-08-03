@@ -24,8 +24,5 @@ const GroupChat = sequelize.define('groupchat', {
     tableName: 'groupchats', // Ensure this matches your actual table name if it's different
 });
 
-GroupChat.associate = function(models) {
-    GroupChat.belongsToMany(models.User, { through: 'UserChatMsgs', as: 'groupchats', foreignKey: 'chatMsgId' });
-  };
 
 module.exports = GroupChat;
