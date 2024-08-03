@@ -1,5 +1,12 @@
 const URL='http://localhost:3000';
 
+const token=localStorage.getItem('token');
+
+// Call the API every second
+setInterval(() => {
+    loadChat();
+}, 1000);
+
 document.addEventListener('DOMContentLoaded',async()=>{
     await loadChat();
     const token=localStorage.getItem('token');
@@ -29,6 +36,7 @@ function pushMessage(e){
         await loadChat();
     })
 }
+
 
 async function  loadChat(){
     const div=document.getElementById('Chat-container');
