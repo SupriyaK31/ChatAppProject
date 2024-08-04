@@ -32,9 +32,13 @@ const addChatmessage=async(req,res)=>{
 
 const showChatMsg=async(req,res)=>{
 try{
+    const lastmsgid = req.query.lastmsgid; 
     const chats = await chat.findAll({
-         where: { groupID: 1 },
-         attributes:['chatMsg'],
+         where: { groupID: 1 ,
+            id: {
+            [Op.lt]: lastmsgid 
+          }},
+         attributes:['id','chatMsg'],
         include: [{
             model: User,
             attributes:['name'],
@@ -46,14 +50,8 @@ try{
     res.status(500).json({error:"Internal server issue"});
 }
 };
-const chatUserName=async(req,res)=>{
-    const userid=req.body.id;
-    await User.findOne({where : {id: 1}}).then((result)=>{
-        return res.status(200).json({message:"Successfull",data:result})
-    })
-};
+
 module.exports={
     addChatmessage,
     showChatMsg,
-    chatUserName
 }
