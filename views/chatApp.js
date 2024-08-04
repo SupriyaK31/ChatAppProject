@@ -1,17 +1,15 @@
 
-
 const URL='http://localhost:3000';
 
 const token=localStorage.getItem('token');
 
-// Call the API every second
-// setInterval(() => {
-//     //loadChat();
-// }, 1000);
+//Call the API every second
+setInterval(() => {
+    loadChat();
+}, 1000);
 
 document.addEventListener('DOMContentLoaded',async()=>{
     await loadChat();
-
     const token=localStorage.getItem('token');
     const decodeToken=parseJwt(token);
     console.log("Decode Token:"+Object.values(decodeToken));
@@ -45,20 +43,31 @@ async function  loadChat(){
     const div=document.getElementById('Chat-container');
     const token=localStorage.getItem('token');
     let AllChatMsg="";
-    const chats=JSON.parse(localStorage.getItem('chats'));
+    let lastMsgid = -1;
+    const chats=JSON.parse(localStorage.getItem('chats')) || [];
+    
     chats.forEach(async(chat)=>{
-        lastMsgid=chat.id;
         AllChatMsg +=`
         <table class="table table-striped table-success text-white">
         <tr>
         <td>${chat.user.name}: ${chat.chatMsg}</td>
         </tr>
     </table>`
+    if (chat.id > lastMsgid) {
+            lastMsgid = chat.id;
+        }
         })
-        console.log("last msg id:",lastMsgid);
+        // console.log("last msg id:",lastMsgid);
         div.innerHTML =AllChatMsg;
-    await axios.get(`${URL}/chat?lastmsgid=${lastMsgid}`,{ headers:{"Authorization": token}}).then(async(response)=>{
-         const chats=response.data.data;
-         localStorage.setItem('chats',JSON.stringify(chats));
-    })
+try{
+    const response=await axios.get(`${URL}/chat?lastmsgid=${lastMsgid}`,{ headers:{"Authorization": token}});
+        const newMsg=response.data.data;
+        console.log("new msg:",newMsg);
+        const oldMsg=localStorage.getItem('chats');
+        mergedMsg=[...chats,...newMsg];
+        localStorage.setItem('chats',JSON.stringify(mergedMsg));
+}catch(error){
+    console.error(error);
+}
+  
 }

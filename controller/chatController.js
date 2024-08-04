@@ -7,7 +7,7 @@ const { hash } = require('crypto');
 const jwt = require('jsonwebtoken');
 const dotenv=require('dotenv');
 const chat=require('../model/chatModel');
-
+const { Op } = require('sequelize');
 dotenv.config();
 
 const addChatmessage=async(req,res)=>{
@@ -32,12 +32,14 @@ const addChatmessage=async(req,res)=>{
 
 const showChatMsg=async(req,res)=>{
 try{
-    const lastmsgid = req.query.lastmsgid; 
+    const lastmsgid=req.query.lastmsgid;
+    console.log(lastmsgid)
     const chats = await chat.findAll({
-         where: { groupID: 1 ,
-            id: {
-            [Op.lt]: lastmsgid 
-          }},
+         where: { groupID: 1,
+            id:{
+                [Op.gt]:lastmsgid
+            }
+          },
          attributes:['id','chatMsg'],
         include: [{
             model: User,
@@ -50,8 +52,14 @@ try{
     res.status(500).json({error:"Internal server issue"});
 }
 };
-
+const chatUserName=async(req,res)=>{
+    const userid=req.body.id;
+    await User.findOne({where : {id: 1}}).then((result)=>{
+        return res.status(200).json({message:"Successfull",data:result})
+    })
+};
 module.exports={
     addChatmessage,
     showChatMsg,
+    chatUserName
 }
