@@ -15,9 +15,9 @@ const addChatmessage=async(req,res)=>{
         const { chatMsg } = req.body;
         const userid = req.user.id;
         const groupID = 1;
-        console.log("Message type of", typeof(chatMsg));
-        console.log('chatGroupID type of :', typeof(groupID));
-        console.log('user type of :', typeof(userid));
+        // console.log("Message type of", typeof(chatMsg));
+        // console.log('chatGroupID type of :', typeof(groupID));
+        // console.log('user type of :', typeof(userid));
         if (!chatMsg || !userid) {
             return res.status(400).json({ error: "Message and userID are required" });
         }
@@ -52,14 +52,7 @@ try{
     res.status(500).json({error:"Internal server issue"});
 }
 };
-const chatUserName=async(req,res)=>{
-    const userid=req.body.id;
-    await User.findOne({where : {id: 1}}).then((result)=>{
-        return res.status(200).json({message:"Successfull",data:result})
-    })
-};
 module.exports={
     addChatmessage,
     showChatMsg,
-    chatUserName
 }

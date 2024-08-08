@@ -9,9 +9,8 @@ const cors=require('cors');
 
 const user=require('./model/userModel');
 const chatMsg=require('./model/chatModel');
-const Group=require('./model/chatGroupModel');
-const { group } = require('console');
-const { FORCE } = require('sequelize/lib/index-hints');
+const ChatGroup=require('./model/chatGroupModel');
+const UserChatGroup=require('./model/userChatGroupModel');
 
 const app=express();
 
@@ -34,7 +33,11 @@ app.use(chatRoute);
 chatMsg.belongsTo(user, { foreignKey: 'userID' });
 user.hasMany(chatMsg, { foreignKey: 'id' });
 
+chatMsg.belongsTo(ChatGroup,{foreignKey:'groupID'});
+ChatGroup.hasMany(chatMsg,{foreignKey:'id'});
 
+user.belongsToMany(ChatGroup, { through: UserChatGroup });
+ChatGroup.belongsToMany(user, { through: UserChatGroup });
 
 sequalize.sync().then(()=>{
     app.listen(PORT,()=>{

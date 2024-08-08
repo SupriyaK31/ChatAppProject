@@ -9,17 +9,40 @@
     
 </head>
 <body style="background-image:url('chat.jpg')">
-<form id="ChatForm" method="post" onsubmit="pushMessage(event)">
+
 <h1 class="text-center text-white">Chat App</h1>
+
+<div class="container">
 <div class="row justify-content-center text-white">
-    <div class="col-md-3"></div>
+    <div class="col-md-3">
+        <button class="btn btn-dark" data-toggle="modal" data-target="#createGroup">New Group</button>
+        <div class="modal fade" id="createGroup" tabindex="-1" role="dialog" aria-labelledby="createGroupModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Crate New Table</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                    </div>
+                <div class="modal-body">
+                    <form>
+                        <lable>Enter Name:</lable>
+                        <input type="text">
+                        <button class="btn btn-primary" onclick="createGroup(event)">Create</button>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+        <div id="GroupName-Container"></div>
+    </div>
     <div class="col-md-6" id="Chat-container">
-
    <!--  -->
-
+    </div>
+<div class="col-md-3"><button class="btn btn-danger" onclick="logOut(event)">Logout</button></div>
 </div>
-<div class="col-md-3"></div>
-</div>
+<form id="ChatForm" method="post" onsubmit="pushMessage(event)">
 <div class="row justify-content-center mt-5">
     <div class="col-md-3"></div>
     <div class="col-md-6">
@@ -29,9 +52,11 @@
         <button class="btn btn-light" id="btnSend">send</button>
     </div>
 </div>
+</div>
 </form>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js" integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="/chatApp.js"></script>
 </body>

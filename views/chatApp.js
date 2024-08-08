@@ -3,17 +3,31 @@ const URL='http://localhost:3000';
 
 const token=localStorage.getItem('token');
 
-//Call the API every second
-setInterval(() => {
-    loadChat();
-}, 1000);
+
+// alert('table added sucessfully');
+// setInterval(() => {
+//     loadChat();
+// }, 1000);
 
 document.addEventListener('DOMContentLoaded',async()=>{
+    
     await loadChat();
+    $('#createGroup').modal('hide');
     const token=localStorage.getItem('token');
     const decodeToken=parseJwt(token);
     console.log("Decode Token:"+Object.values(decodeToken));
+    
 });
+function createGroup(event){
+
+    console.log("create group clicked")
+}
+function logOut(event){
+        event.preventDefault();
+        localStorage.removeItem('token');
+        localStorage.removeItem('chats');
+        window.location.href="/login";
+}
 
 function parseJwt (token) {
     var base64Url = token.split('.')[1];
@@ -34,6 +48,7 @@ function pushMessage(e){
     axios.post(`${URL}/chat`,{chatMsg},{ headers:{"Authorization": token}}).then(async(res)=>{
         console.log(res);
         form.reset();
+        await getNewItem();
         await loadChat();
     })
 }
@@ -41,11 +56,15 @@ function pushMessage(e){
 
 async function  loadChat(){
     const div=document.getElementById('Chat-container');
+    
     const token=localStorage.getItem('token');
     let AllChatMsg="";
     let lastMsgid = -1;
+    if(lastMsgid=-1){
+        await getNewItem();
+    }
     const chats=JSON.parse(localStorage.getItem('chats')) || [];
-    
+
     chats.forEach(async(chat)=>{
         AllChatMsg +=`
         <table class="table table-striped table-success text-white">
@@ -57,17 +76,42 @@ async function  loadChat(){
             lastMsgid = chat.id;
         }
         })
-        // console.log("last msg id:",lastMsgid);
         div.innerHTML =AllChatMsg;
-try{
-    const response=await axios.get(`${URL}/chat?lastmsgid=${lastMsgid}`,{ headers:{"Authorization": token}});
-        const newMsg=response.data.data;
-        console.log("new msg:",newMsg);
-        const oldMsg=localStorage.getItem('chats');
-        mergedMsg=[...chats,...newMsg];
-        localStorage.setItem('chats',JSON.stringify(mergedMsg));
-}catch(error){
-    console.error(error);
-}
+// try{
+//     const response=await axios.get(`${URL}/chat?lastmsgid=${lastMsgid}`,{ headers:{"Authorization": token}});
+//         const newMsg=response.data.data;
+//         console.log("new msg:",newMsg);
+//         mergedMsg=[...chats,...newMsg];
+//         localStorage.setItem('chats',JSON.stringify(mergedMsg));
+// }catch(error){
+//     console.error(error);
+// }
   
+}
+
+
+async function getNewItem() {
+
+    try{
+        const chats=JSON.parse(localStorage.getItem('chats')) || [];
+        let lastMsgid = -1;
+        chats.forEach(async(chat)=>{
+        if (chat.id > lastMsgid) {
+                lastMsgid = chat.id;
+            }
+            })
+        const response=await axios.get(`${URL}/chat?lastmsgid=${lastMsgid}`,{ headers:{"Authorization": token}});
+            const newMsg=response.data.data;
+            // console.log("new msg:",newMsg);
+            mergedMsg=[...chats,...newMsg];
+            localStorage.setItem('chats',JSON.stringify(mergedMsg));
+            
+    }catch(error){
+        console.error(error);
+    }
+    
+}
+function getChatGroup(){
+    const divGroup=document.getElementById('GroupName-container');
+
 }
