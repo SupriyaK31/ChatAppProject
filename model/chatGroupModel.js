@@ -1,19 +1,19 @@
 const Sequalize=require('sequelize');
 const sequalize=require('../utils/database');
 
-const chatGroup=sequalize.define("chatGroups",{
-    Id:{
+const Group=sequalize.define("Groups",{
+    group_id:{
         type:Sequalize.INTEGER,
         autoIncrement:true,
         allowNull:false,
         primaryKey:true
     },
-    gName:{
+    group_name:{
         type:Sequalize.STRING
     },
-    userId:{
+    created_by:{
         type:Sequalize.INTEGER
     }
 });
 
-module.exports=chatGroup;
+module.exports=Group;

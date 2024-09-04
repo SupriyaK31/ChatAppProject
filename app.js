@@ -2,13 +2,14 @@ const express=require('express');
 const PORT=3000;
 const userRoute=require('./routes/userRoute');
 const chatRoute=require('./routes/chatRoute');
+const groupRoute=require('./routes/groupRoute');
 const path=require('path');
 const sequalize=require('./utils/database');
 const bodyParser = require('body-parser');
 const cors=require('cors');
 
 const user=require('./model/userModel');
-const chatMsg=require('./model/chatModel');
+const chatMsg=require('./model/messageModel');
 const ChatGroup=require('./model/chatGroupModel');
 const UserChatGroup=require('./model/userChatGroupModel');
 
@@ -29,15 +30,17 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(userRoute);
 app.use(chatRoute);
+app.use(groupRoute);
 
-chatMsg.belongsTo(user, { foreignKey: 'userID' });
-user.hasMany(chatMsg, { foreignKey: 'id' });
+chatMsg.belongsTo(user, { foreignKey: 'user_id' });
+user.hasMany(chatMsg, { foreignKey: 'message_id' });
 
-chatMsg.belongsTo(ChatGroup,{foreignKey:'groupID'});
-ChatGroup.hasMany(chatMsg,{foreignKey:'id'});
+chatMsg.belongsTo(ChatGroup,{foreignKey:'group_id'});
+ChatGroup.hasMany(chatMsg,{foreignKey:'message_id'});
 
-user.belongsToMany(ChatGroup, { through: UserChatGroup });
-ChatGroup.belongsToMany(user, { through: UserChatGroup });
+user.belongsToMany(ChatGroup, { through: UserChatGroup, foreignKey: 'user_id', otherKey: 'group_id' });
+ChatGroup.belongsToMany(user, { through: UserChatGroup, foreignKey: 'group_id', otherKey: 'user_id' });
+
 
 sequalize.sync().then(()=>{
     app.listen(PORT,()=>{

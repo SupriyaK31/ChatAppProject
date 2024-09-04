@@ -2,13 +2,13 @@ const Sequalize=require('sequelize');
 const sequalize=require('../utils/database');
 
 const User =sequalize.define('user',{
-    id:{
+    user_id:{
         type:Sequalize.INTEGER,
         autoIncrement:true,
         allowNull:false,
         primaryKey:true,
     },
-    name:{
+    username:{
         type:Sequalize.STRING
     },
     email:{

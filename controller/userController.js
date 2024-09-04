@@ -3,15 +3,17 @@ const path=require('path');
 const user=require('../model/userModel');
 const bcrypt=require('bcrypt');
 const sequalize = require('../utils/database');
-const { Sequelize, where } = require('sequelize');
+const { Sequelize, Op, Model } = require('sequelize');
 const { hash } = require('crypto');
 const jwt = require('jsonwebtoken');
 const dotenv=require('dotenv');
+const { json } = require('body-parser');
+const group_members = require('../model/userChatGroupModel');
 
 dotenv.config();
 
 function generateToken(id,name){
-    return jwt.sign({userId:id, name:name},process.env.TOKEN);
+    return jwt.sign({user_id:id, username:name},process.env.TOKEN);
 }
 const getIndex=(req,res)=>{
 res.setHeader('Content-Type', 'text/html');
@@ -31,6 +33,7 @@ const HomePage = (req,res)=>{
     res.setHeader('Content-Type', 'text/html');
     res.sendFile(path.join(__dirname,'../','views','home.html'));
 };
+
 function isstringValidator(string){
     if(string =='undefine' || string.length===0){
         return true;
@@ -40,14 +43,14 @@ function isstringValidator(string){
 }
 const createUser= async(req,res)=>{
     try{
-        const {name,email,mobile,password}=req.body;
-        if(isstringValidator(name) || isstringValidator(email) || isstringValidator(password)){
+        const {username,email,mobile,password}=req.body;
+        if(isstringValidator(username) || isstringValidator(email) || isstringValidator(password)){
          return res.status(400).json({err:'bad Paramets. Something is missing'})
         }
         const saltround=10;
         bcrypt.hash(password,saltround,async(err,hash)=>{
          console.log(err);
-         await user.create({name,email,mobile,password:hash}).then(()=>{
+         await user.create({username,email,mobile,password:hash}).then(()=>{
              return res.status(200).json({Message:"successfull user created"});
          }).then((result)=>{
              console.log(result);
@@ -79,7 +82,7 @@ try{
     }else{
         const passMatch= await bcrypt.compare(password,User.password);
         if(passMatch){
-            return res.status(200).json({message:'login Sucessful',token: generateToken(User.id,User.name)});
+            return res.status(200).json({message:'login Sucessful',token: generateToken(User.user_id,User.username)});
         }else{
             res.status(401).json({error:'Password does not matched'});
         }
@@ -90,7 +93,29 @@ try{
 
   }
  };
+ const userList=async(req,res)=>{
+  try{
+    const userid = req.user.user_id;
+    const {group_id}=req.params;
+    console.log("gid>>>>>",group_id)
+    const userList= await group_members.findAll({
+        where:{
+            group_id:group_id
+        },
+        attributes:['user_id'],
+        include: [{
+            model: user,
+            attributes:['user_id','username'],
+           },
+        ]});
+        
+    res.status(200).json({message:'Successful' , user:userList});
 
+  }catch(error){
+    console.error(error);
+    res.status(500),json({error :'Internal server issue'});
+  }
+ };
  module.exports={
     createUser,
     SignupPage,
@@ -98,5 +123,7 @@ try{
     LoginPage,
     postLogin,
     HomePage,
-    generateToken
+    generateToken,
+    userList,
+
  };

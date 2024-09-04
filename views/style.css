@@ -1,0 +1,69 @@
+.back-container{
+    position: relative;
+}
+.back-top{
+    background-color:rgb(115, 211, 120);
+    height: 15vh;
+}
+.back-main{
+    background-color: beige;
+    background-image: url(./chat.jpg);
+    height: 85vh;
+}
+
+.front-container{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.front-container1{
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+}
+.chat-top{
+    background-color: #ededed;
+    min-height: 50px;
+}
+.profile-image{
+    height: 30px;
+    width: 30px;
+    margin-top: 7px;
+}
+.chat-groups{
+    background-color: white;
+    height: 550px;
+    font-style:Bold;
+    font-size:large;
+}
+.chat-msgback{
+    background-color: #dfdede;
+    height: 550px;
+}
+.btn-top{
+    margin-top: 7px;
+}
+.chat-groups-scroll{
+    overflow-y: scroll;
+    height: 550px;
+}
+.chat-msg-scroll{
+    overflow-y: scroll;
+    height: 480px;
+}
+.addMember-scroll{
+    overflow-y: scroll;
+    height: 350px;
+}
+.memberList{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+.msgBox-container{
+    background-color:darkgray;
+    margin-top: 7px;
+}
