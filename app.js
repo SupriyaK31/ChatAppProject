@@ -1,5 +1,6 @@
 const express=require('express');
-const PORT=3000;
+require('dotenv').config();
+const PORT = process.env.PORT || 3000;
 const userRoute=require('./routes/userRoute');
 const chatRoute=require('./routes/chatRoute');
 const groupRoute=require('./routes/groupRoute');
@@ -7,7 +8,6 @@ const path=require('path');
 const sequalize=require('./utils/database');
 const bodyParser = require('body-parser');
 const cors=require('cors');
-
 const user=require('./model/userModel');
 const chatMsg=require('./model/messageModel');
 const ChatGroup=require('./model/chatGroupModel');
@@ -27,7 +27,6 @@ app.use(express.json());
 app.use(bodyParser.json());
 // For parsing application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(userRoute);
 app.use(chatRoute);
 app.use(groupRoute);
